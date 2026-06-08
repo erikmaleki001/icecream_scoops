@@ -865,6 +865,15 @@
       border-color: var(--rose);
       box-shadow: 0 0 0 3px rgba(201, 131, 143, 0.15);
     }
+    .form-group input:-webkit-autofill,
+    .form-group input:-webkit-autofill:hover,
+    .form-group input:-webkit-autofill:focus {
+      -webkit-box-shadow: 0 0 0px 1000px var(--cream) inset;
+      box-shadow: 0 0 0px 1000px var(--cream) inset;
+      -webkit-text-fill-color: var(--charcoal);
+      border-color: var(--blush-deep);
+      transition: background-color 5000s ease-in-out 0s;
+    }
     .form-group textarea { resize: vertical; min-height: 110px; }
 
     .form-submit {
@@ -1009,6 +1018,82 @@
       .gallery-card.tall .gallery-real-img { min-height: 260px; }
     }
 
+    /* ===== LIGHTBOX ===== */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(0,0,0,0.92);
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .lightbox.active { display: flex; }
+    .lightbox-img {
+      max-width: 90vw;
+      max-height: 88vh;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 1.2rem; right: 1.5rem;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+      line-height: 1;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+    .lightbox-close:hover { opacity: 1; }
+    .lightbox-prev, .lightbox-next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.15);
+      border: none;
+      color: white;
+      font-size: 1.8rem;
+      cursor: pointer;
+      padding: 0.8rem 1rem;
+      border-radius: 50%;
+      transition: background 0.2s;
+      line-height: 1;
+    }
+    .lightbox-prev:hover, .lightbox-next:hover { background: rgba(255,255,255,0.3); }
+    .lightbox-prev { left: 1rem; }
+    .lightbox-next { right: 1rem; }
+    .lightbox-counter {
+      position: absolute;
+      bottom: 1.2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,0.6);
+      font-family: 'Lato', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+    }
+
+    /* ===== CUSTOM FORM VALIDATION ===== */
+    .form-group .field-error {
+      font-family: 'Lato', sans-serif;
+      font-size: 0.72rem;
+      color: #c0392b;
+      margin-top: 0.3rem;
+      display: none;
+    }
+    .form-group.has-error input,
+    .form-group.has-error select,
+    .form-group.has-error textarea {
+      border-color: #c0392b;
+      box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.12);
+    }
+    .form-group.has-error .field-error { display: block; }
+
     /* ===== REAL PHOTO STYLES ===== */
     .gallery-real-img {
       width: 100%;
@@ -1049,8 +1134,8 @@
 <body>
 
   <!-- ===== NAVIGATION ===== -->
-  <nav id="main-nav">
-    <a href="#home" class="nav-logo">
+  <nav id="main-nav" aria-label="Main navigation">
+    <a href="#home" class="nav-logo" aria-label="Scoops Wheely Good Ice Cream - Go to homepage">
       <div style="width:52px;height:52px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,0.08);">
         <img src="images/brand/scoops_logo.png" alt="Scoops Wheely Good Ice Cream" style="height:46px;width:auto;" />
       </div>
@@ -1062,13 +1147,13 @@
       <li><a href="#faq">FAQ</a></li>
       <li><a href="#contact" class="btn btn-primary">Book Now</a></li>
     </ul>
-    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
       <span></span><span></span><span></span>
     </button>
   </nav>
 
   <!-- Mobile Menu -->
-  <div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-menu" id="mobile-menu" role="navigation" aria-label="Mobile navigation">
     <a href="#home" onclick="closeMenu()">Home</a>
     <a href="#about" onclick="closeMenu()">Our Story</a>
     <a href="#gallery" onclick="closeMenu()">Gallery</a>
@@ -1205,75 +1290,75 @@
 
     <div class="gallery-grid">
       <div class="gallery-card fade-in">
-        <img class="gallery-real-img" src="images/gallery/gallery-img1.webp" loading="lazy" alt="Scoops ice cream cart at an event" />
+        <img class="gallery-real-img" src="images/gallery/gallery-img1.webp" loading="lazy" onclick="openLightbox(0)" style="cursor:pointer;" aria-label="View gallery image 1" role="button" tabindex="0" alt="Scoops ice cream cart at an event" />
         <div class="gallery-overlay"><span class="gallery-overlay-icon">✦</span></div>
       </div>
       <div class="gallery-card fade-in fade-in-delay-1">
-        <img class="gallery-real-img" src="images/gallery/gallery-img2.webp" loading="lazy" alt="Scoops ice cream cart at an event" />
+        <img class="gallery-real-img" src="images/gallery/gallery-img2.webp" loading="lazy" onclick="openLightbox(1)" style="cursor:pointer;" aria-label="View gallery image 2" role="button" tabindex="0" alt="Scoops ice cream cart at an event" />
         <div class="gallery-overlay"><span class="gallery-overlay-icon">✦</span></div>
       </div>
       <div class="gallery-card fade-in fade-in-delay-2">
-        <img class="gallery-real-img" src="images/gallery/gallery-img3.webp" loading="lazy" alt="Scoops ice cream cart at an event" />
+        <img class="gallery-real-img" src="images/gallery/gallery-img3.webp" loading="lazy" onclick="openLightbox(2)" style="cursor:pointer;" aria-label="View gallery image 3" role="button" tabindex="0" alt="Scoops ice cream cart at an event" />
         <div class="gallery-overlay"><span class="gallery-overlay-icon">✦</span></div>
       </div>
       <div class="gallery-card fade-in fade-in-delay-1">
-        <img class="gallery-real-img" src="images/gallery/gallery-img4.webp" loading="lazy" alt="Scoops ice cream cart at an event" />
+        <img class="gallery-real-img" src="images/gallery/gallery-img4.webp" loading="lazy" onclick="openLightbox(3)" style="cursor:pointer;" aria-label="View gallery image 4" role="button" tabindex="0" alt="Scoops ice cream cart at an event" />
         <div class="gallery-overlay"><span class="gallery-overlay-icon">✦</span></div>
       </div>
       <div class="gallery-card fade-in fade-in-delay-2">
-        <img class="gallery-real-img" src="images/gallery/gallery-img5.webp" loading="lazy" alt="Scoops ice cream cart at an event" />
+        <img class="gallery-real-img" src="images/gallery/gallery-img5.webp" loading="lazy" onclick="openLightbox(4)" style="cursor:pointer;" aria-label="View gallery image 5" role="button" tabindex="0" alt="Scoops ice cream cart at an event" />
         <div class="gallery-overlay"><span class="gallery-overlay-icon">✦</span></div>
       </div>
       <div class="gallery-card fade-in fade-in-delay-3">
-        <img class="gallery-real-img" src="images/gallery/gallery-img6.webp" loading="lazy" alt="Scoops ice cream cart at an event" />
+        <img class="gallery-real-img" src="images/gallery/gallery-img6.webp" loading="lazy" onclick="openLightbox(5)" style="cursor:pointer;" aria-label="View gallery image 6" role="button" tabindex="0" alt="Scoops ice cream cart at an event" />
         <div class="gallery-overlay"><span class="gallery-overlay-icon">✦</span></div>
       </div>
       <div class="gallery-card fade-in">
-        <img class="gallery-real-img" src="images/gallery/gallery-img7.webp" loading="lazy" alt="Scoops ice cream cart at an event" />
+        <img class="gallery-real-img" src="images/gallery/gallery-img7.webp" loading="lazy" onclick="openLightbox(6)" style="cursor:pointer;" aria-label="View gallery image 7" role="button" tabindex="0" alt="Scoops ice cream cart at an event" />
         <div class="gallery-overlay"><span class="gallery-overlay-icon">✦</span></div>
       </div>
       <div class="gallery-card fade-in fade-in-delay-1">
-        <img class="gallery-real-img" src="images/gallery/gallery-img8.webp" loading="lazy" alt="Scoops ice cream cart at an event" />
+        <img class="gallery-real-img" src="images/gallery/gallery-img8.webp" loading="lazy" onclick="openLightbox(7)" style="cursor:pointer;" aria-label="View gallery image 8" role="button" tabindex="0" alt="Scoops ice cream cart at an event" />
         <div class="gallery-overlay"><span class="gallery-overlay-icon">✦</span></div>
       </div>
       <div class="gallery-card fade-in fade-in-delay-2">
-        <img class="gallery-real-img" src="images/gallery/gallery-img9.webp" loading="lazy" alt="Scoops ice cream cart at an event" />
+        <img class="gallery-real-img" src="images/gallery/gallery-img9.webp" loading="lazy" onclick="openLightbox(8)" style="cursor:pointer;" aria-label="View gallery image 9" role="button" tabindex="0" alt="Scoops ice cream cart at an event" />
         <div class="gallery-overlay"><span class="gallery-overlay-icon">✦</span></div>
       </div>
       <div class="gallery-card fade-in fade-in-delay-3">
-        <img class="gallery-real-img" src="images/gallery/gallery-img10.webp" loading="lazy" alt="Scoops ice cream cart at an event" />
+        <img class="gallery-real-img" src="images/gallery/gallery-img10.webp" loading="lazy" onclick="openLightbox(9)" style="cursor:pointer;" aria-label="View gallery image 10" role="button" tabindex="0" alt="Scoops ice cream cart at an event" />
         <div class="gallery-overlay"><span class="gallery-overlay-icon">✦</span></div>
       </div>
       <div class="gallery-card fade-in">
-        <img class="gallery-real-img" src="images/gallery/gallery-img11.webp" loading="lazy" alt="Scoops ice cream cart at an event" />
+        <img class="gallery-real-img" src="images/gallery/gallery-img11.webp" loading="lazy" onclick="openLightbox(10)" style="cursor:pointer;" aria-label="View gallery image 11" role="button" tabindex="0" alt="Scoops ice cream cart at an event" />
         <div class="gallery-overlay"><span class="gallery-overlay-icon">✦</span></div>
       </div>
       <div class="gallery-card fade-in fade-in-delay-1">
-        <img class="gallery-real-img" src="images/gallery/gallery-img12.webp" loading="lazy" alt="Scoops ice cream cart at an event" />
+        <img class="gallery-real-img" src="images/gallery/gallery-img12.webp" loading="lazy" onclick="openLightbox(11)" style="cursor:pointer;" aria-label="View gallery image 12" role="button" tabindex="0" alt="Scoops ice cream cart at an event" />
         <div class="gallery-overlay"><span class="gallery-overlay-icon">✦</span></div>
       </div>
       <div class="gallery-card fade-in fade-in-delay-2">
-        <img class="gallery-real-img" src="images/gallery/gallery-img13.webp" loading="lazy" alt="Scoops ice cream cart at an event" />
+        <img class="gallery-real-img" src="images/gallery/gallery-img13.webp" loading="lazy" onclick="openLightbox(12)" style="cursor:pointer;" aria-label="View gallery image 13" role="button" tabindex="0" alt="Scoops ice cream cart at an event" />
         <div class="gallery-overlay"><span class="gallery-overlay-icon">✦</span></div>
       </div>
       <div class="gallery-card fade-in fade-in-delay-3">
-        <img class="gallery-real-img" src="images/gallery/gallery-img14.webp" loading="lazy" alt="Scoops ice cream cart at an event" />
+        <img class="gallery-real-img" src="images/gallery/gallery-img14.webp" loading="lazy" onclick="openLightbox(13)" style="cursor:pointer;" aria-label="View gallery image 14" role="button" tabindex="0" alt="Scoops ice cream cart at an event" />
         <div class="gallery-overlay"><span class="gallery-overlay-icon">✦</span></div>
       </div>
       <div class="gallery-card fade-in">
-        <img class="gallery-real-img" src="images/gallery/gallery-img15.webp" loading="lazy" alt="Scoops ice cream cart at an event" />
+        <img class="gallery-real-img" src="images/gallery/gallery-img15.webp" loading="lazy" onclick="openLightbox(14)" style="cursor:pointer;" aria-label="View gallery image 15" role="button" tabindex="0" alt="Scoops ice cream cart at an event" />
         <div class="gallery-overlay"><span class="gallery-overlay-icon">✦</span></div>
       </div>
       <div class="gallery-card fade-in fade-in-delay-1">
-        <img class="gallery-real-img" src="images/gallery/gallery-img16.webp" loading="lazy" alt="Scoops ice cream cart at an event" />
+        <img class="gallery-real-img" src="images/gallery/gallery-img16.webp" loading="lazy" onclick="openLightbox(15)" style="cursor:pointer;" aria-label="View gallery image 16" role="button" tabindex="0" alt="Scoops ice cream cart at an event" />
         <div class="gallery-overlay"><span class="gallery-overlay-icon">✦</span></div>
       </div>
       <div class="gallery-card fade-in fade-in-delay-2">
-        <img class="gallery-real-img" src="images/gallery/gallery-img17.webp" loading="lazy" alt="Scoops ice cream cart at an event" />
+        <img class="gallery-real-img" src="images/gallery/gallery-img17.webp" loading="lazy" onclick="openLightbox(16)" style="cursor:pointer;" aria-label="View gallery image 17" role="button" tabindex="0" alt="Scoops ice cream cart at an event" />
         <div class="gallery-overlay"><span class="gallery-overlay-icon">✦</span></div>
       </div>
       <div class="gallery-card fade-in fade-in-delay-3">
-        <img class="gallery-real-img" src="images/gallery/gallery-img18.webp" loading="lazy" alt="Scoops ice cream cart at an event" />
+        <img class="gallery-real-img" src="images/gallery/gallery-img18.webp" loading="lazy" onclick="openLightbox(17)" style="cursor:pointer;" aria-label="View gallery image 18" role="button" tabindex="0" alt="Scoops ice cream cart at an event" />
         <div class="gallery-overlay"><span class="gallery-overlay-icon">✦</span></div>
       </div>
     </div>
@@ -1338,7 +1423,7 @@
       <div class="faq-list fade-in fade-in-delay-1">
 
         <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
+          <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
             Where do you serve?
             <span class="faq-icon">+</span>
           </button>
@@ -1360,7 +1445,7 @@
         </div>
 
         <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
+          <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
             How do I book Scoops?
             <span class="faq-icon">+</span>
           </button>
@@ -1372,7 +1457,7 @@
         </div>
 
         <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
+          <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
             What forms of payment do you accept?
             <span class="faq-icon">+</span>
           </button>
@@ -1384,7 +1469,7 @@
         </div>
 
         <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
+          <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
             How many flavors are included in a package?
             <span class="faq-icon">+</span>
           </button>
@@ -1396,7 +1481,7 @@
         </div>
 
         <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
+          <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
             Can we get ice cream sandwiches?
             <span class="faq-icon">+</span>
           </button>
@@ -1408,7 +1493,7 @@
         </div>
 
         <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
+          <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
             Do you provide cups, cones, and utensils?
             <span class="faq-icon">+</span>
           </button>
@@ -1420,7 +1505,7 @@
         </div>
 
         <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
+          <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
             What is the service time?
             <span class="faq-icon">+</span>
           </button>
@@ -1432,7 +1517,7 @@
         </div>
 
         <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
+          <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
             Is there a travel fee?
             <span class="faq-icon">+</span>
           </button>
@@ -1444,7 +1529,7 @@
         </div>
 
         <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
+          <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
             Are toppings available?
             <span class="faq-icon">+</span>
           </button>
@@ -1498,29 +1583,33 @@
       <div class="fade-in fade-in-delay-1">
         <div class="booking-form" id="booking-form">
           <div class="form-title">Request a Booking ✦</div>
-          <form id="event-form" action="https://formspree.io/f/mkoajjqz" method="POST" onsubmit="submitForm(event)">
+          <form id="event-form" action="https://formspree.io/f/mkoajjqz" method="POST" onsubmit="submitForm(event)" novalidate>
               <input type="hidden" name="_subject" value="🍦 New Booking Request — Wheely Good Ice Cream" />
               <input type="hidden" name="_format" value="plain" />
             <div class="form-grid">
               <div class="form-group">
                 <label for="fname">First Name</label>
-                <input type="text" id="fname" name="first-name" placeholder="Amanda" required />
+                <input type="text" id="fname" name="first-name" placeholder="Amanda" aria-required="true" aria-describedby="fname-error" />
+                <span class="field-error" id="fname-error">Please enter your first name.</span>
               </div>
               <div class="form-group">
                 <label for="lname">Last Name</label>
-                <input type="text" id="lname" name="last-name" placeholder="Smith" required />
+                <input type="text" id="lname" name="last-name" placeholder="Smith" aria-required="true" aria-describedby="lname-error" />
+                <span class="field-error" id="lname-error">Please enter your last name.</span>
               </div>
               <div class="form-group">
                 <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" placeholder="hello@youremail.com" required />
+                <input type="email" id="email" name="email" placeholder="hello@youremail.com" aria-required="true" aria-describedby="email-error" />
+                <span class="field-error" id="email-error">Please enter a valid email address.</span>
               </div>
               <div class="form-group">
                 <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" name="phone" placeholder="(407) 555-0123" />
+                <input type="tel" id="phone" name="phone" placeholder="(407) 555-0123" maxlength="14" aria-required="true" aria-describedby="phone-error" />
+                <span class="field-error" id="phone-error">Please enter a valid 10-digit phone number.</span>
               </div>
               <div class="form-group">
                 <label for="event-type">Event Type</label>
-                <select id="event-type" name="event-type" required>
+                <select id="event-type" name="event-type" aria-required="true" aria-describedby="event-type-error">
                   <option value="" disabled selected>Select event type…</option>
                   <option value="wedding">Wedding</option>
                   <option value="corporate">Corporate Event</option>
@@ -1529,10 +1618,12 @@
                   <option value="community">Community / Festival</option>
                   <option value="other">Other</option>
                 </select>
+                <span class="field-error" id="event-type-error">Please select an event type.</span>
               </div>
               <div class="form-group">
                 <label for="event-date">Event Date</label>
-                <input type="date" id="event-date" name="event-date" required />
+                <input type="date" id="event-date" name="event-date" aria-required="true" aria-describedby="event-date-error" />
+                <span class="field-error" id="event-date-error">Please select your event date.</span>
               </div>
               <div class="form-group">
                 <label for="guests">Estimated Guest Count</label>
@@ -1554,6 +1645,7 @@
               </div>
             </div>
             <button type="submit" class="btn btn-primary form-submit">Send My Request 🍦</button>
+            <p id="form-error" style="display:none; color:#c0392b; font-family:'Lato',sans-serif; font-size:0.8rem; margin-top:0.75rem; text-align:center;">Something went wrong. Please try again or email us directly.</p>
             <p class="form-note">We respond within 24 hours · No commitment required</p>
           </form>
         </div>
@@ -1567,6 +1659,15 @@
     </div>
   </section>
 
+  <!-- ===== LIGHTBOX ===== -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close image viewer">✕</button>
+    <button class="lightbox-prev" onclick="lightboxNav(-1)" aria-label="Previous image">&#8592;</button>
+    <img class="lightbox-img" id="lightbox-img" src="" alt="Gallery image" />
+    <button class="lightbox-next" onclick="lightboxNav(1)" aria-label="Next image">&#8594;</button>
+    <div class="lightbox-counter" id="lightbox-counter"></div>
+  </div>
+
   <!-- ===== FOOTER ===== -->
   <footer>
     <div class="footer-inner">
@@ -1579,10 +1680,10 @@
           </a>
           <p>Bringing joy, sweetness, and unforgettable moments to weddings and special events across Orlando and Charleston since 2016.</p>
           <div class="footer-social">
-            <a href="https://www.instagram.com/wheelygoodicecreamcart/" target="_blank" rel="noopener" title="Instagram">
+            <a href="https://www.instagram.com/wheelygoodicecreamcart/" target="_blank" rel="noopener" aria-label="Visit us on Instagram">
               <img src="images/misc/instagram-button.png" alt="Instagram" style="height:38px; width:auto; display:block;" />
             </a>
-            <a href="https://www.facebook.com/ScoopsIceCreamCart" target="_blank" rel="noopener" title="Facebook">
+            <a href="https://www.facebook.com/ScoopsIceCreamCart" target="_blank" rel="noopener" aria-label="Visit us on Facebook">
               <img src="images/misc/facebook-button.png" alt="Facebook" style="height:38px; width:auto; display:block;" />
             </a>
           </div>
@@ -1601,7 +1702,7 @@
           <h4>Locations</h4>
           <ul>
             <li><a href="#contact">Orlando, FL</a></li>
-            <li><a href="#contact">Charleston, SC</a></li>
+                      <li><a href="#contact">Charleston, SC</a></li>
             <li><a href="#contact">Tampa, FL</a></li>
             <li><a href="#contact">Lakeland, FL</a></li>
           </ul>
@@ -1619,8 +1720,47 @@
     </div>
   </footer>
 
-  <!-- ===== JAVASCRIPT ===== -->
   <script>
+    // ── Lightbox ──
+    const galleryImages = Array.from({length: 18}, (_, i) => `images/gallery/gallery-img${i+1}.webp`);
+    let currentIndex = 0;
+
+    function openLightbox(index) {
+      currentIndex = index;
+      const lb = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      const counter = document.getElementById('lightbox-counter');
+      img.src = galleryImages[currentIndex];
+      counter.textContent = (currentIndex + 1) + ' / ' + galleryImages.length;
+      lb.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function lightboxNav(dir) {
+      currentIndex = (currentIndex + dir + galleryImages.length) % galleryImages.length;
+      const img = document.getElementById('lightbox-img');
+      const counter = document.getElementById('lightbox-counter');
+      img.src = galleryImages[currentIndex];
+      counter.textContent = (currentIndex + 1) + ' / ' + galleryImages.length;
+    }
+
+    document.getElementById('lightbox').addEventListener('click', function(e) {
+      if (e.target === this) closeLightbox();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      const lb = document.getElementById('lightbox');
+      if (!lb.classList.contains('active')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') lightboxNav(1);
+      if (e.key === 'ArrowLeft') lightboxNav(-1);
+    });
+
     // ── Nav scroll shadow ──
     const nav = document.getElementById('main-nav');
     window.addEventListener('scroll', () => {
@@ -1632,13 +1772,15 @@
     const mobileMenu = document.getElementById('mobile-menu');
 
     hamburger.addEventListener('click', () => {
-      hamburger.classList.toggle('open');
+      const isOpen = hamburger.classList.toggle('open');
       mobileMenu.classList.toggle('open');
+      hamburger.setAttribute('aria-expanded', isOpen);
     });
 
     function closeMenu() {
       hamburger.classList.remove('open');
       mobileMenu.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
     }
 
     // ── FAQ accordion ──
@@ -1646,16 +1788,15 @@
       const answer = btn.nextElementSibling;
       const isOpen = btn.classList.contains('open');
 
-      // Close all open FAQs
       document.querySelectorAll('.faq-question.open').forEach(q => {
         q.classList.remove('open');
-        const a = q.nextElementSibling;
-        a.style.maxHeight = '0';
+        q.setAttribute('aria-expanded', 'false');
+        q.nextElementSibling.style.maxHeight = '0';
       });
 
-      // Open clicked if it was closed
       if (!isOpen) {
         btn.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
         answer.style.maxHeight = answer.scrollHeight + 'px';
       }
     }
@@ -1672,16 +1813,65 @@
     }, { threshold: 0.12 });
     fadeEls.forEach(el => observer.observe(el));
 
+    // ── Custom form validation ──
+    function validateField(field) {
+      const group = field.closest('.form-group');
+      if (!group) return true;
+      if (field.getAttribute('aria-required') !== 'true') return true;
+
+      const val = field.value.trim();
+      let valid = val !== '';
+
+      if (valid && field.type === 'email') {
+        valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+      }
+      if (valid && field.type === 'tel') {
+        valid = /^\(\d{3}\) \d{3}-\d{4}$/.test(val);
+      }
+
+      group.classList.toggle('has-error', !valid);
+      return valid;
+    }
+
+    // ── Phone auto-format ──
+    const phoneInput = document.getElementById('phone');
+    phoneInput.addEventListener('input', function(e) {
+      let digits = e.target.value.replace(/\D/g, '').substring(0, 10);
+      let formatted = '';
+      if (digits.length > 0) formatted = '(' + digits.substring(0, 3);
+      if (digits.length >= 4) formatted += ') ' + digits.substring(3, 6);
+      if (digits.length >= 7) formatted += '-' + digits.substring(6, 10);
+      e.target.value = formatted;
+    });
+
+    // Clear error on a field once the user starts correcting it (after submit attempt)
+    document.querySelectorAll('#event-form input, #event-form select').forEach(field => {
+      field.addEventListener('input', () => {
+        const group = field.closest('.form-group');
+        if (group && group.classList.contains('has-error')) validateField(field);
+      });
+            field.addEventListener('change', () => {
+        const group = field.closest('.form-group');
+        if (group && group.classList.contains('has-error')) validateField(field);
+      });
+    });
+
     // ── Form submission ──
     function submitForm(e) {
       e.preventDefault();
       const form = document.getElementById('event-form');
       const success = document.getElementById('form-success');
-      const data = new FormData(form);
+
+      const requiredFields = form.querySelectorAll('[aria-required="true"]');
+      let valid = true;
+      requiredFields.forEach(field => {
+        if (!validateField(field)) valid = false;
+      });
+      if (!valid) return;
 
       fetch(form.action, {
         method: 'POST',
-        body: data,
+        body: new FormData(form),
         headers: { 'Accept': 'application/json' }
       }).then(res => {
         if (res.ok) {
@@ -1695,19 +1885,18 @@
             setTimeout(() => { success.style.opacity = '1'; }, 50);
           }, 400);
         } else {
-          alert('Oops! Something went wrong. Please try again or email us directly.');
+          document.getElementById('form-error').style.display = 'block';
         }
       }).catch(() => {
-        alert('Oops! Something went wrong. Please try again or email us directly.');
+        document.getElementById('form-error').style.display = 'block';
       });
     }
 
-    // Set minimum date to today for event date picker
+    // ── Set min date ──
     const dateInput = document.getElementById('event-date');
     if (dateInput) {
-      const today = new Date().toISOString().split('T')[0];
-      dateInput.min = today;
+      dateInput.min = new Date().toISOString().split('T')[0];
     }
   </script>
 </body>
-</html>   
+</html>
